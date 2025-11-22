@@ -1,0 +1,319 @@
+#include <bits/stdc++.h>
+using namespace std;
+//Coder:RichKidlor in 10IT CTL_DL
+//Contest : Codeforces,Vnoi,Clueoj,TLOI
+using ll = long long;
+#define FOR(i,a,b) for(int i = (a);i < (b);i++)
+#define REP(i,a,b) for(int i = (a);i <= (b);i++)
+#define REPD(i,a,b) for(int i = (a); i >= (b);i--)
+#define FORD(i,a,b) for(int i = (a);i > (b);i--)
+#define fi first
+#define se second
+#define pb push_back
+#define BIT(mask,i) (mask) & (1 << (i))
+#define CHECK(mask,i) (((mask) >> (i)) & 1)
+#define all(x) (x).begin(), (x).end()
+#define sz(x) (int)(x).size()
+#define mp make_pair
+#define mt make_tuple
+#define pii pair<int,int>
+#define pil pair<int,ll>
+#define pll pair<ll,ll>
+#define allr(x) (x).rbegin(),(x).rend()
+#define pli pair<ll,int>
+#define nocout cout << "NO" << '\n'
+#define yescout cout << "YES" << '\n'
+#define INF (ll) 1e18
+#define iINF 1e9
+#define i128 __int128_t
+#define minusone cout << -1 << '\n'
+#define ar array
+//_________MODPOW___________
+//ll modpow(ll a,ll b){
+//    ll res = 1;
+//    while(b){
+//        if(b & 1) res = res * a % MOD;
+//        a = a * a % MOD;
+//        b >>= 1;
+//    }
+//    return res;
+//}
+//_________HASH__________
+//vector<ll> h,p;
+//void hashing(const string &s){
+//    int n = sz(s);
+//    h.assign(n + 1,0);
+//    p.assign(n + 1,1);
+//    FOR(i,0,n){
+//        h[i + 1] = (h[i] * BASE + (s[i] - 'a' + 1)) % MOD;
+//        p[i + 1] = (p[i] * BASE) % MOD;
+//    }
+//}
+//ll gethash(int l,int r){
+//    return (h[r] - h[l] * p[r - l] % MOD + MOD) % MOD;
+//}
+// ___________Segment_Tree____________
+//struct Segment{
+//    void build(int v,int l,int r){
+//        if(l == r) t[v] = a[l];
+//        else{
+//            int m = (l + r ) / 2;
+//            build(2 * v,l,m);
+//            build(2 * v + 1,m + 1,r);
+//            t[v] = t[2 * v] + t[2 * v + 1];
+//        }
+//    }
+//    void update(int v,int l,int r,int pos,int val){
+//        if(l == r) t[v] = val;
+//        else{
+//            int m = (l + r) / 2;
+//            if(pos >= m){ update(2 * v + 1,m + 1,r,pos,val);}
+//            else update(2 * v,l,m,pos,val);
+//            t[v] = t[2 * v] + t[2 * v + 1];
+//        }
+//    }
+//    int query(int v,int l,int r,int tl,int tr){
+//        if(l > tr || r < tl) return 0;
+//        if(l >= tl && r <= tr) return t[v];
+//        int m = (l + r) / 2;
+//        return query(2 * v,l,m,tl,tr) + query(2 * v + 1,m + 1,r,tl,tr);
+//    }
+//};
+//____FENWICK___
+//struct Fenwick{
+//    void update(int pos,int val){
+//        while(pos <= n){
+//            bit[pos] += val;
+//            pos += pos & -pos;
+//        }
+//    }
+//    int query(int pos){
+//        int ans = 0;
+//        while(pos){
+//            ans += bit[pos];
+//            pos -= pos & -pos;
+//        }
+//    }
+//};
+//#include<ext/pb_ds/assoc_container.hpp>
+//using namespace __gnu_pbds;
+//template<class T> using ordered_set = tree<T,null_type,less<T>,rb_tree_tag,tree_order_statistics_node_update>;
+#define STR(x) #x
+#define FileName(x) STR(x)
+//#define File river
+#pragma GCC optimize("Ofast,unroll-loops")
+#pragma GCC target("avx2")
+//#define int ll
+// knapsack
+int n,k;
+int a[271][271];
+bool check(int i,int j){
+    if(i < 0 || j < 0 || j >= n || i >= n)return 0;
+    return 1;
+}
+int check2(int i,int j){
+    int take = a[i][j];
+    int cnt = 0,cntnow = 0;
+    int dxx[3] = {0,-1,-1},dyy[3] = {-1,-1,0};
+    set<int> ss;
+    FOR(d,0,3){
+        int x = i + dxx[d];
+        int y = j + dyy[d];
+        if(check(x,y))ss.insert(a[x][y]);
+    } ss.insert(a[i][j]);
+    if(sz(ss) >= 3) cnt++;
+    ss.clear();
+    dxx[0] = 1;
+    dxx[1] = 1;
+    dxx[2] = 0;
+    dyy[0] = 0;
+    dyy[1] = 1;
+    dyy[2] = 1;
+    FOR(d,0,3){
+        int x = i + dxx[d];
+        int y = j + dyy[d];
+        if(check(x,y))ss.insert(a[x][y]);
+    } ss.insert(a[i][j]);
+    if(sz(ss) >= 3) cnt++;ss.clear();
+    dxx[0] = 1;
+    dxx[1] = 1;
+    dxx[2] = 0;
+    dyy[0] = 0;
+    dyy[1] = -1;
+    dyy[2] = -1;
+    FOR(d,0,3){
+        int x = i + dxx[d];
+        int y = j + dyy[d];
+        if(check(x,y))ss.insert(a[x][y]);
+    } ss.insert(a[i][j]);
+    if(sz(ss) >= 3) cnt++;ss.clear();
+    dxx[0] = -1;
+    dxx[1] = -1;
+    dxx[2] = 0;
+    dyy[0] = 0;
+    dyy[1] = 1;
+    dyy[2] = 1;
+    FOR(d,0,3){
+        int x = i + dxx[d];
+        int y = j + dyy[d];
+        if(check(x,y))ss.insert(a[x][y]);
+    } ss.insert(a[i][j]);
+    if(sz(ss) >= 3) cnt++;ss.clear();
+    int dx[8] = {-1,-1,-1,0,0,1,1,1};
+    int dy[8] = {1,0,-1,-1,1,-1,1,0};
+    set<int> s;
+    FOR(d,0,8){
+        int x = i + dx[d];
+        int y = j + dy[d];
+        if(check(x,y)) s.insert(a[x][y]);
+    }
+    s.insert(a[i][j]);
+    if(sz(s) < k) a[i][j] = INT_MAX;
+    else {
+        int ans = 0;
+        REP(bruh,1,k)if(bruh != take){
+            ss.clear();a[i][j] = bruh;cntnow = 0;
+            dxx[0] = -1;
+            dxx[1] = -1;
+            dxx[2] = 0;
+            dyy[0] = 0;
+            dyy[1] = -1;
+            dyy[2] = -1;
+            FOR(d,0,3){
+                int x = i + dxx[d];
+                int y = j + dyy[d];
+                if(check(x,y))ss.insert(a[x][y]);
+            } ss.insert(a[i][j]);
+            if(sz(ss) >= 3) cntnow++;ss.clear();
+            dxx[0] = 1;
+            dxx[1] = 1;
+            dxx[2] = 0;
+            dyy[0] = 0;
+            dyy[1] = 1;
+            dyy[2] = 1;
+            FOR(d,0,3){
+                int x = i + dxx[d];
+                int y = j + dyy[d];
+                if(check(x,y))ss.insert(a[x][y]);
+            } ss.insert(a[i][j]);
+            if(sz(ss) >= 3) cntnow++;ss.clear();
+            dxx[0] = 1;
+            dxx[1] = 1;
+            dxx[2] = 0;
+            dyy[0] = 0;
+            dyy[1] = -1;
+            dyy[2] = -1;
+            FOR(d,0,3){
+                int x = i + dxx[d];
+                int y = j + dyy[d];
+                if(check(x,y))ss.insert(a[x][y]);
+            } ss.insert(a[i][j]);
+            if(sz(ss) >= 3) cntnow++;ss.clear();
+            dxx[0] = -1;
+            dxx[1] = -1;
+            dxx[2] = 0;
+            dyy[0] = 0;
+            dyy[1] = 1;
+            dyy[2] = 1;
+            FOR(d,0,3){
+                int x = i + dxx[d];
+                int y = j + dyy[d];
+                if(check(x,y))ss.insert(a[x][y]);
+            }
+            ss.insert(a[i][j]);
+            if(sz(ss) >= 3) cntnow++;ss.clear();
+            ans = max(ans,cntnow - cnt);
+        }
+        a[i][j] = take;
+        return ans;
+    }
+    dxx[0] = -1;
+    dxx[1] = -1;
+    dxx[2] = 0;
+    dyy[0] = 0;
+    dyy[1] = -1;
+    dyy[2] = -1;
+    FOR(d,0,3){
+        int x = i + dxx[d];
+        int y = j + dyy[d];
+        if(check(x,y))ss.insert(a[x][y]);
+    } ss.insert(a[i][j]);
+    if(sz(ss) >= 3) cntnow++;
+    ss.clear();
+    dxx[0] = 1;
+    dxx[1] = 1;
+    dxx[2] = 0;
+    dyy[0] = 0;
+    dyy[1] = 1;
+    dyy[2] = 1;
+    FOR(d,0,3){
+        int x = i + dxx[d];
+        int y = j + dyy[d];
+        if(check(x,y))ss.insert(a[x][y]);
+    } ss.insert(a[i][j]);
+    if(sz(ss) >= 3) cntnow++;ss.clear();
+    dxx[0] = 1;
+    dxx[1] = 1;
+    dxx[2] = 0;
+    dyy[0] = 0;
+    dyy[1] = -1;
+    dyy[2] = -1;
+    FOR(d,0,3){
+        int x = i + dxx[d];
+        int y = j + dyy[d];
+        if(check(x,y))ss.insert(a[x][y]);
+    } ss.insert(a[i][j]);
+    if(sz(ss) >= 3) cntnow++;ss.clear();
+    dxx[0] = -1;
+    dxx[1] = -1;
+    dxx[2] = 0;
+    dyy[0] = 0;
+    dyy[1] = 1;
+    dyy[2] = 1;
+    FOR(d,0,3){
+        int x = i + dxx[d];
+        int y = j + dyy[d];
+        if(check(x,y))ss.insert(a[x][y]);
+    }
+    ss.insert(a[i][j]);
+    if(sz(ss) >= 3) cntnow++;ss.clear();
+    a[i][j] = take;
+    return cntnow - cnt;
+}
+void solve(void){
+    cin >> n >> k;
+    //vector<vector<int>> a(n + 1,vector<int> (n + 1));
+    FOR(i,0,n) FOR(j,0,n) cin >> a[i][j];
+    int dx[3] = {0,-1,-1},dy[3] = {-1,-1,0},B = 0;
+    FOR(i,0,n) FOR(j,0,n){
+        set<int> s;
+        s.insert(a[i][j]);
+        FOR(d,0,3){
+            int x = i + dx[d];
+            int y = j + dy[d];
+            if(!check(x,y)) continue;
+            s.insert(a[x][y]);
+        }
+        if(sz(s) >= 3) B++;
+    }
+    int ans = 0;
+    FOR(i,0,n) FOR(j,0,n){
+        ans = max(ans,check2(i,j));
+    }
+    cout << B + ans << '\n';
+}
+signed main(){
+//    freopen("Trains.Inp","r",stdin);
+//    freopen("Trains.Out","w",stdout);
+#ifdef File
+    freopen(FileName(File)".inp","r",stdin);
+    freopen(FileName(File)".out","w",stdout);
+#endif
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    ll t = 1;//cin >> t;
+    while(t--)
+    solve();
+    return 0;
+}
+
